@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { getAllDentist } from "../actions/auth-actions";
+import { getAllDentist, deleteDentist } from "../actions/auth-actions";
 
 export const TableDentist = () => {
   const [dentist, setDentist] = useState([]);
@@ -22,6 +22,12 @@ export const TableDentist = () => {
     };
     allDentist();
   }, []);
+
+  const onDelete = async (id) => {
+    const response = await deleteDentist();
+    console.log(response);
+  };
+
   return (
     <div>
       <TableContainer component={Paper}>
@@ -52,7 +58,7 @@ export const TableDentist = () => {
                   <EditIcon color="info" />
                 </TableCell>
                 <TableCell>
-                  <DeleteIcon color="error" />
+                  <DeleteIcon color="error" onClick={() => onDelete()} />
                 </TableCell>
               </TableRow>
             ))}

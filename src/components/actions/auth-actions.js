@@ -237,12 +237,12 @@ export const updateTurn = (body) => {
   });
 };
 
-export const deleteTurn = (body) => {
+export const deleteTurn = (id) => {
   return new Promise((resolve, reject) => {
     const headers = {
       "Content-Type": "application/json",
     };
-    HttpClient.delete(`http://localhost:8081/turn/delete`, headers)
+    HttpClient.delete(`http://localhost:8081/turn/delete/${id}`, headers)
       .then((response) => {
         resolve(response);
       })
