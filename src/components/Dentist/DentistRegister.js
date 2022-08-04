@@ -20,8 +20,10 @@ import {
   getAllPatients,
   registerDentist,
 } from "../actions/auth-actions";
+import { useNavigate } from "react-router-dom";
 
 export default function DentistRegister() {
+  const history = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -34,6 +36,7 @@ export default function DentistRegister() {
     registerDentist(dentist).then(
       (response) => {
         if (response.status === 200 || response.code === 200) {
+          history("/patients");
         } else {
         }
       },

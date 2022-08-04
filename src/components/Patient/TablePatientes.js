@@ -9,7 +9,7 @@ import {
   Paper,
   Tooltip,
 } from "@mui/material";
-import { getAllPatients } from "../actions/auth-actions";
+import { deletePatient, getAllPatients } from "../actions/auth-actions";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 

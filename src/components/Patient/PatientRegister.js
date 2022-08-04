@@ -18,8 +18,10 @@ import {
 } from "@mui/material";
 import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
 import { registerPatient } from "../actions/auth-actions";
+import { useNavigate } from "react-router-dom";
 
 export const PatientRegister = () => {
+  const history = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -38,7 +40,8 @@ export const PatientRegister = () => {
     };
     registerPatient(patient).then(
       (response) => {
-        if (response.status === 200 || response.code === 200) {
+        if (response.status === 201 || response.code === 201) {
+          history("/patients");
         } else {
         }
       },

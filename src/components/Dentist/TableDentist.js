@@ -10,10 +10,27 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { getAllDentist, deleteDentist } from "../actions/auth-actions";
+import {
+  getAllDentist,
+  deleteDentist,
+  updateDentist,
+} from "../actions/auth-actions";
+import { useNavigate } from "react-router-dom";
 
 export const TableDentist = () => {
+  const history = useNavigate();
   const [dentist, setDentist] = useState([]);
+
+  const [message, setMessage] = useState({
+    description: "",
+    textButtonSubmit: "",
+    title: "",
+    handleClick: () => {},
+    handleClickOut: () => {},
+    oneButtons: false,
+    type: "",
+    open: false,
+  });
 
   useEffect(() => {
     const allDentist = async () => {
@@ -23,9 +40,66 @@ export const TableDentist = () => {
     allDentist();
   }, []);
 
+  const handleClickOut = () => setMessage({ ...message, open: false });
+
+  const handleClickReset = () => {
+    setMessage({ ...message, open: false });
+    dentist();
+  };
+  const onUpdate = () => {
+    const data = dentist;
+    var dentistUpdate = {
+      id: data.id,
+      name: data.name,
+      lastName: data.lastName,
+      registrationNumber: data.registrationNumber,
+    };
+    console.log(dentistUpdate);
+    updateDentist(dentist).then(
+      (response) => {
+        if (response.status === 200 || response.code === 200) {
+          history("/patients-register");
+        } else {
+        }
+      },
+      (error) => {}
+    );
+  };
+
   const onDelete = async (id) => {
-    const response = await deleteDentist();
-    console.log(response);
+    const response = await deleteDentist(id);
+    if (response?.status >= 200 && response?.status < 399) {
+      setMessage({
+        description: `Usuario eliminado exitosamente`,
+        textButtonSubmit: "Aceptar",
+        handleClick: () => handleClickReset(),
+        type: "SUCCESS",
+        oneButtons: true,
+        open: true,
+      });
+    } else if (
+      response?.status > 399 &&
+      response?.status !== 401 &&
+      response?.status !== 403
+    ) {
+      setMessage({
+        description: `Ocurrió un error procesando la solicitud, inténtelo nuevamente`,
+        textButtonSubmit: "ACEPTAR",
+        handleClick: () => handleClickOut(),
+        oneButtons: true,
+        type: "WARNING",
+        open: true,
+      });
+    } else {
+      setMessage({
+        description: `Ocurrió un error procesando la solicitud, inténtelo nuevamente`,
+        textButtonSubmit: "ACEPTAR",
+        handleClick: () => handleClickOut(),
+        oneButtons: true,
+        type: "WARNING",
+        open: true,
+      });
+    }
   };
 
   return (
@@ -55,7 +129,7 @@ export const TableDentist = () => {
                 <TableCell>{row.lastName}</TableCell>
                 <TableCell>{row.registrationNumber}</TableCell>
                 <TableCell>
-                  <EditIcon color="info" />
+                  <EditIcon color="info" onClick={() => onUpdate()} />
                 </TableCell>
                 <TableCell>
                   <DeleteIcon color="error" onClick={() => onDelete()} />
